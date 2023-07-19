@@ -22,6 +22,8 @@ module load python
 
 # check if conda environment exists
 
+mamba env create -n Titania -f envs/Titania.yaml
+
 conda activate Titania
 
 # Check for 4CAC

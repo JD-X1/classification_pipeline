@@ -1,3 +1,7 @@
+# Description
+
+Pipeline is meant to string together some 
+
 # Downloading the pipline
 
 ```
@@ -18,3 +22,5 @@ Running the pipeline from within this folder on nersc should be a matter of subm
 ```
 sbatch nersc_runner.sub
 ```
+
+__IMPORTANT: __ 
