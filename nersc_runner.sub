@@ -4,7 +4,6 @@
 #SBATCH -n 1
 #SBATCH -q regular
 #SBATCH -J ARTMS
-#SBATCH --mail-user=jduque@lbl.gov
 #SBATCH --mail-type=ALL
 #SBATCH -t 12:00:00
 
@@ -20,6 +19,9 @@
 # dry run of snakefile with thread command
 
 module load python
+
+# check if conda environment exists
+
 conda activate Titania
 
 # Check for 4CAC
