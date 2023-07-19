@@ -1,4 +1,4 @@
-#! usr/bin/env python
+#!/usr/bin/env python
 import os
 import pandas as pd
 import sys
@@ -35,11 +35,11 @@ rule run_busco:
     output:
         "busco_out/{mag}/summary.txt"
     conda:
-        "mb"
+        "../envs/mb.yaml"
     threads:
-        64
+        240
     shell:
-        "compleasm run -a {input} -t {threads} -l eukaryota -L mb_downloads/ -o busco_out/{wildcards.mag}"
+        "compleasm run -a {input} -t {threads} -l eukaryota -L resources/mb_downloads/ -o busco_out/{wildcards.mag}"
 
 rule run_eukcc:
     input:
@@ -49,7 +49,7 @@ rule run_eukcc:
     threads:
         64
     conda:
-        "Titania"
+        "../envs/Titania.yaml"
     shell:
         "eukcc single --out {output} --threads {threads} {input}"
 
@@ -59,7 +59,7 @@ rule run_xgb_class:
     output:
         "xgb_out/{mag}.out"
     conda:
-        "Titania"
+        "../envs/Titania.yaml"
     shell:
         "python 4CAC/classify_xgb.py -f {input} -o {output}"
 
@@ -68,6 +68,8 @@ rule mag_stat:
         "mags/"
     output:
         "mag_stats.csv"
+    conda:
+        "../envs/Titania.yaml"
     shell:
         "python modules/mag_stats.py -f {input}"
 
@@ -77,7 +79,7 @@ rule mag_stat_b:
     output:
         "mag_stats_b.csv"
     conda:
-        "Titania"
+        "../envs/Titania.yaml"
     shell:
         "python modules/busco_parse.py -b busco_out/ -m {input.magstat} -o {output}"
 
@@ -88,7 +90,7 @@ rule mag_stat_e:
     output:
         "mag_stats_e.csv"
     conda:
-        "Titania"
+        "../envs/Titania.yaml"
     shell:
         "python modules/eukcc_parse.py -e eukcc_out -m {input} -o {output}"
         
@@ -98,6 +100,18 @@ rule mag_stat_x:
     output:
         "mag_stats_x.csv"
     conda:
-        "Titania"
+        "../envs/Titania.yaml"
     shell:
         "python modules/xg_parse.py -x xgb_out -m {input} -o {output}"
+
+rule cleaner:
+    input:
+       base=rules.mag_stat.output,
+       comp=rules.mag_stat_b.output,
+       euk=rules.mag_stat_e.output
+    output:
+        touch("cleaner.done")
+    run:
+        shell("rm {input.base}")
+        shell("rm {input.comp}")
+        shell("rm {input.euk}")

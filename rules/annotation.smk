@@ -13,5 +13,7 @@ rule gmes:
         "mags/{mags}"
     output:
         directory("braker_out/{mags}/")
+    conda:
+        "envs/braker.yaml"
     shell:
         "braker.pl --genome=m{input} --workingdir={output} --GENEMARK_PATH=/global/u2/j/jduque/EukClass/gmes_linux_64_4/gmes_petap.pl --AUGUSTUS_ab_initio --esmode --gff3 -threads 64"
