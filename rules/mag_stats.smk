@@ -2,18 +2,11 @@
 import os
 import pandas as pd
 import sys
+#### ENVS ####
 
-
-
-# make a rule that sets up cluster parameters
-# use the --slurm flag to run on the cluster
-
-# locally we can just use the follow environment breakdowns due to incompatible python versions
-
-# local
 # Titania (python 3.7.10)
-# Apollo (python 3.9.16)
-    # minibusco
+# mb (python 3.9.16)
+    # compleasm
 	
 # call mains from modules folder using shell calls 
 
@@ -47,7 +40,7 @@ rule run_eukcc:
     output:
         directory("eukcc_out/{mag}/")
     threads:
-        64
+        240
     conda:
         "../envs/Titania.yaml"
     shell:
@@ -61,7 +54,7 @@ rule run_xgb_class:
     conda:
         "../envs/Titania.yaml"
     shell:
-        "python 4CAC/classify_xgb.py -f {input} -o {output}"
+        "python resources/4CAC/classify_xgb.py -f {input} -o {output}"
 
 rule mag_stat:
     input:
